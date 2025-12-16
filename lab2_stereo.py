@@ -21,10 +21,16 @@ right = cv2.imread('/Users/sadiq/Desktop/M2/Lecture notes/AVG/AVG_Two_Views_Geom
 left_color = cv2.imread('/Users/sadiq/Desktop/M2/Lecture notes/AVG/AVG_Two_Views_Geometry/scripts_and_file/img/left_color.png')
 
 # compute disparity
-#stereo = cv2.StereoSGBM_create(numDisparities=16, blockSize=5)
-stereo = cv2.StereoSGBM_create(numDisparities=192, blockSize=5, P1=600, P2=2400)
+stereo = cv2.StereoSGBM_create(numDisparities=16, blockSize=5)
+#stereo = cv2.StereoSGBM_create(numDisparities=192, blockSize=5, P1=600, P2=2400)
 disparity = stereo.compute(left, right)  # an image of the same size with "left" (or "right")
 disparity = disparity.astype(np.float32) / 16.0  # StereoBM output is fixed-point scaled by 16
+
+try:
+    print('Disparity min:', float(disparity.min()), 'max:', float(disparity.max()), 'mean:', float(disparity.mean()))
+    print('Valid disparity pixels:', int((disparity > 0).sum()), 'of', disparity.size)
+except Exception:
+    pass
 
 # TODO: compute depth of every pixel whose disparity is positive
 # hint: assume d is the disparity of pixel (u, v)
