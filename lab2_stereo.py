@@ -15,9 +15,9 @@ K = np.array([
 Bf = 3.875744e+02  # base line * focal length
 
 # load images
-left = cv2.imread('/user/sabubakar2024/New Folder/skeleton/img/left.png', 0)
-right = cv2.imread('/user/sabubakar2024/New Folder/skeleton/img/right.png', 0)
-left_color = cv2.imread('/user/sabubakar2024/New Folder/skeleton/img/left_color.png')
+left = cv2.imread('/Users/sadiq/Desktop/M2/Lecture notes/AVG/AVG_Two_Views_Geometry/scripts_and_file/img/left.png', 0)
+right = cv2.imread('/Users/sadiq/Desktop/M2/Lecture notes/AVG/AVG_Two_Views_Geometry/scripts_and_file/img/right.png', 0)
+left_color = cv2.imread('/Users/sadiq/Desktop/M2/Lecture notes/AVG/AVG_Two_Views_Geometry/scripts_and_file/img/left_color.png')
 
 # compute disparity
 stereo = cv2.StereoBM_create(numDisparities=16, blockSize=5)
