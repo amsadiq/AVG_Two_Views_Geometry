@@ -4,6 +4,7 @@ np.int = int  # compatibility alias for packages expecting np.int
 np.float = float  # compatibility alias for packages expecting np.float
 import cv2
 import open3d as o3d
+import os
 
 
 K = np.array([
@@ -20,7 +21,8 @@ right = cv2.imread('/Users/sadiq/Desktop/M2/Lecture notes/AVG/AVG_Two_Views_Geom
 left_color = cv2.imread('/Users/sadiq/Desktop/M2/Lecture notes/AVG/AVG_Two_Views_Geometry/scripts_and_file/img/left_color.png')
 
 # compute disparity
-stereo = cv2.StereoBM_create(numDisparities=16, blockSize=5)
+#stereo = cv2.StereoSGBM_create(numDisparities=16, blockSize=5)
+stereo = cv2.StereoSGBM_create(numDisparities=192, blockSize=5, P1=600, P2=2400)
 disparity = stereo.compute(left, right)  # an image of the same size with "left" (or "right")
 disparity = disparity.astype(np.float32) / 16.0  # StereoBM output is fixed-point scaled by 16
 
@@ -64,4 +66,15 @@ cloud = o3d.geometry.PointCloud()  # create pointcloud object
 cloud.points = o3d.utility.Vector3dVector(all_3d)
 cloud.colors = o3d.utility.Vector3dVector(all_color)
 mesh_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.6, origin=[0, 0, 0])  # create frame object
-o3d.visualization.draw_geometries([cloud, mesh_frame])
+try:
+    o3d.visualization.draw_geometries(
+        [cloud, mesh_frame], window_name="PointCloud", width=1024, height=768
+    )
+except Exception as e:
+    print("[Open3D] Visualization failed:", e)
+    out_path = os.path.join(os.path.dirname(__file__), "cloud_output.ply")
+    try:
+        o3d.io.write_point_cloud(out_path, cloud)
+        print("Saved point cloud to", out_path)
+    except Exception as e2:
+        print("Failed to save point cloud:", e2)
